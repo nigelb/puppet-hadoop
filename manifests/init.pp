@@ -9,58 +9,58 @@ class hadoop {
 
         Exec { path => "/bin" }
 
-	group { "hadoop":
+	group { $hadoop::params::hadoop_group:
 		ensure => present,
-		gid => "800"
+		gid => $hadoop::params::hadoop_group_gid
 	}
 
-	user { "hduser":
+	user { $hadoop::params::hadoop_user:
 		ensure => present,
 		comment => "Hadoop",
 		password => "!!",
-		uid => "800",
-		gid => "800",
+		uid => $hadoop::params::hadoop_user_uid,
+		gid => $hadoop::params::hadoop_group_gid,
 		shell => "/bin/bash",
-		home => "/home/hduser",
-		require => Group["hadoop"],
+		home => "/home/${hadoop::params::hadoop_user}",
+		require => Group[$hadoop::params::hadoop_group],
 	}
 	
-	file { "/home/hduser/.bash_profile":
+	file { "/home/${hadoop::params::hadoop_user}/.bash_profile":
 		ensure => present,
 		owner => "hduser",
 		group => "hadoop",
 		alias => "hduser-bash_profile",
 		content => template("hadoop/home/bash_profile.erb"),
-		require => User["hduser"]
+		require => User[$hadoop::params::hadoop_user]
 	}
 		
-	file { "/home/hduser":
+	file { "/home/${hadoop::params::hadoop_user}":
 		ensure => "directory",
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		alias => "hduser-home",
-		require => [ User["hduser"], Group["hadoop"] ]
+		require => [ User[$hadoop::params::hadoop_user], Group[$hadoop::params::hadoop_group] ]
 	}
 
 	file {"$hadoop::params::hdfs_path":
 		ensure => "directory",
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		alias => "hdfs-dir",
 		require => File["hduser-home"]
 	}
 	
 	file {"$hadoop::params::hadoop_base":
 		ensure => "directory",
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		alias => "hadoop-base",
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}.tar.gz":
 		mode => 0644,
-		owner => hduser,
-		group => hadoop,
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		source => "puppet:///modules/hadoop/hadoop-${hadoop::params::version}.tar.gz",
 		alias => "hadoop-source-tgz",
 		before => Exec["untar-hadoop"],
@@ -74,14 +74,14 @@ class hadoop {
 		alias => "untar-hadoop",
 		refreshonly => true,
 		subscribe => File["hadoop-source-tgz"],
-		user => "hduser",
+		user => $hadoop::params::hadoop_user,
 		before => [ File["hadoop-symlink"], File["hadoop-app-dir"]]
 	}
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}":
 		ensure => "directory",
 		mode => 0644,
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		alias => "hadoop-app-dir"
 	}
 		
@@ -89,82 +89,82 @@ class hadoop {
 		force => true,
 		ensure => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}",
 		alias => "hadoop-symlink",
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		require => File["hadoop-source-tgz"],
 		before => [ File["core-site-xml"], File["hdfs-site-xml"], File["mapred-site-xml"], File["hadoop-env-sh"]]
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/core-site.xml":
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "core-site-xml",
 		content => template("hadoop/conf/core-site.xml.erb"),
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/hdfs-site.xml":
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "hdfs-site-xml",
 		content => template("hadoop/conf/hdfs-site.xml.erb"),
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/hadoop-env.sh":
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "hadoop-env-sh",
 		content => template("hadoop/conf/hadoop-env.sh.erb"),
 	}
 	
 	exec { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/hadoop namenode -format":
-		user => "hduser",
+		user => $hadoop::params::hadoop_user,
 		alias => "format-hdfs",
 		refreshonly => true,
 		subscribe => File["hdfs-dir"],
-		require => [ File["hadoop-symlink"], File["java-app-dir"], File["hduser-bash_profile"], File["mapred-site-xml"], File["hdfs-site-xml"], File["core-site-xml"], File["hadoop-env-sh"]]
+		require => [ File["hadoop-symlink"], File["hduser-bash_profile"], File["mapred-site-xml"], File["hdfs-site-xml"], File["core-site-xml"], File["hadoop-env-sh"]]
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/mapred-site.xml":
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "mapred-site-xml",
 		content => template("hadoop/conf/mapred-site.xml.erb"),		
 	}
 	
-	file { "/home/hduser/.ssh/":
-		owner => "hduser",
-		group => "hadoop",
+	file { "/home/${hadoop::params::hadoop_user}/.ssh/":
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "700",
 		ensure => "directory",
 		alias => "hduser-ssh-dir",
 	}
 	
-	file { "/home/hduser/.ssh/id_rsa.pub":
+	file { "/home/${hadoop::params::hadoop_user}/.ssh/id_rsa.pub":
 		ensure => present,
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		source => "puppet:///modules/hadoop/ssh/id_rsa.pub",
 		require => File["hduser-ssh-dir"],
 	}
 	
-	file { "/home/hduser/.ssh/id_rsa":
+	file { "/home/${hadoop::params::hadoop_user}/.ssh/id_rsa":
 		ensure => present,
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "600",
 		source => "puppet:///modules/hadoop/ssh/id_rsa",
 		require => File["hduser-ssh-dir"],
 	}
 	
-	file { "/home/hduser/.ssh/authorized_keys":
+	file { "/home/${hadoop::params::hadoop_user}/.ssh/authorized_keys":
 		ensure => present,
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		source => "puppet:///modules/hadoop/ssh/id_rsa.pub",
 		require => File["hduser-ssh-dir"],

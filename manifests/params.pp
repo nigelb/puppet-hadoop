@@ -2,37 +2,18 @@
 
 class hadoop::params {
 
-	include java::params
-
-	$version = $::hostname ? {
-		default			=> "0.20.203.0",
-	}
-        
-	$master = $::hostname ? {
-		default			=> "hadoop01",
-	}
-        
-	$slaves = $::hostname ? {
-		default			=> [hadoop01, hadoop-02, hadoop-03] 
-	}
-	$hdfsport = $::hostname ? {
-		default			=> "8020",
-	}
-
-	$replication = $::hostname ? {
-		default			=> "3",
-	}
-
-	$jobtrackerport = $::hostname ? {
-		default			=> "8021",
-	}
-	$java_home = $::hostname ? {
-		default			=> "${java::params::java_base}/jdk${java::params::java_version}",
-	}
-	$hadoop_base = $::hostname ? {
-		default			=> "/opt/hadoop",
-	}
-	$hdfs_path = $::hostname ? {
-		default			=> "/home/hduser/hdfs",
-	}
+	$version = extlookup("version")
+	$master = extlookup("master")
+	$slaves = extlookup("slaves")
+	$hdfsport =  extlookup("hdfsport")
+	$replication =  extlookup("replication")
+	$jobtrackerport =  extlookup("jobtrackerport")
+	$java_home =  extlookup("java_home")
+	$hadoop_base =  extlookup("hadoop_base")
+	$hdfs_path =  extlookup("hdfs_path")
+	
+	$hadoop_user = extlookup("hadoop_user")
+	$hadoop_user_uid = extlookup("hadoop_user_uid")
+	$hadoop_group = extlookup("hadoop_group")
+	$hadoop_group_gid = extlookup("hadoop_group_gid")
 }
