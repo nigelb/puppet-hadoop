@@ -6,4 +6,4 @@ hadoop_user_uid,800
 hadoop_group,hadoop
 hadoop_group_gid,800
 java_home,
-hdfs_path,/home/${hadoop::params::hadoop_user}/hdfs
+hdfs_path,/home/%{hadoop::params::hadoop_user}/hdfs
