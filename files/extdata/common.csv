@@ -1,0 +1,9 @@
+hdfsport,8020
+jobtrackerport,8021
+hadoop_base,/opt/hadoop
+hadoop_user,hadoop
+hadoop_user_uid,800
+hadoop_group,hadoop
+hadoop_group_gid,800
+java_home,
+hdfs_path,/home/${hadoop::params::hadoop_user}/hdfs
