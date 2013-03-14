@@ -27,8 +27,8 @@ class hadoop {
 	
 	file { "/home/${hadoop::params::hadoop_user}/.bash_profile":
 		ensure => present,
-		owner => "hduser",
-		group => "hadoop",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
 		alias => "hduser-bash_profile",
 		content => template("hadoop/home/bash_profile.erb"),
 		require => User[$hadoop::params::hadoop_user]
