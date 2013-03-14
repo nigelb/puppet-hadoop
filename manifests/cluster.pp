@@ -7,8 +7,8 @@ class hadoop::cluster {
 class hadoop::cluster::master {
 	
         file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/masters":
-		owner => "hduser",
-		group => "hadoop",
+                owner => $hadoop::params::hadoop_user,
+                group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "hadoop-master",
 		content => template("hadoop/conf/masters.erb"),		
@@ -18,8 +18,8 @@ class hadoop::cluster::master {
 
 class hadoop::cluster::slave {
         file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/slaves":
-		owner => "hduser",
-		group => "hadoop",
+                owner => $hadoop::params::hadoop_user,
+                group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "hadoop-slave",
 		content => template("hadoop/conf/slaves.erb"),		
