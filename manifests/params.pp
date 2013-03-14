@@ -2,6 +2,11 @@
 
 class hadoop::params {
 
+	$hadoop_user = extlookup("hadoop_user")
+	$hadoop_user_uid = extlookup("hadoop_user_uid")
+	$hadoop_group = extlookup("hadoop_group")
+	$hadoop_group_gid = extlookup("hadoop_group_gid")
+
 	$version = extlookup("version")
 	$master = extlookup("master")
 	$slaves = extlookup("slaves")
@@ -12,8 +17,4 @@ class hadoop::params {
 	$hadoop_base =  extlookup("hadoop_base")
 	$hdfs_path =  extlookup("hdfs_path")
 	
-	$hadoop_user = extlookup("hadoop_user")
-	$hadoop_user_uid = extlookup("hadoop_user_uid")
-	$hadoop_group = extlookup("hadoop_group")
-	$hadoop_group_gid = extlookup("hadoop_group_gid")
 }
