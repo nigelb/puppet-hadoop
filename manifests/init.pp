@@ -7,7 +7,7 @@ class hadoop {
 	include hadoop::cluster::master
 	include hadoop::cluster::slave
 
-        Exec { path => "/bin" }
+        Exec { path => ["/bin", "/usr/bin"] }
 
 	group { $hadoop::params::hadoop_group:
 		ensure => present,
