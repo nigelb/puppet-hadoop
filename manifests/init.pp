@@ -85,14 +85,25 @@ class hadoop {
 		alias => "hadoop-app-dir"
 	}
 		
+	file { "/etc/hadoop":
+		force => true,
+		ensure => "link",
+		target => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf",
+		alias => "etc-hadoop-symlink",
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
+		require => File["hadoop-source-tgz"],
+	}
+	
 	file { "${hadoop::params::hadoop_base}/hadoop":
 		force => true,
-		ensure => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}",
+		ensure => "link",
+		target => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}",
 		alias => "hadoop-symlink",
 		owner => $hadoop::params::hadoop_user,
 		group => $hadoop::params::hadoop_group,
 		require => File["hadoop-source-tgz"],
-		before => [ File["core-site-xml"], File["hdfs-site-xml"], File["mapred-site-xml"], File["hadoop-env-sh"]]
+		before => [ File["core-site-xml"], File["hdfs-site-xml"], File["mapred-site-xml"], File["hadoop-env-sh"] ]
 	}
 	
 	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/core-site.xml":
