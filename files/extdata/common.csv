@@ -1,3 +1,4 @@
+version,1.1.2
 hdfsport,8020
 jobtrackerport,8021
 hadoop_base,/opt/hadoop
