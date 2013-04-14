@@ -1,20 +1,23 @@
 # /etc/puppet/modules/hadoop/manifests/params.pp
 
-class hadoop::params {
+class hadoop::params(
+	$hadoop_user = "hadoop",
+	$hadoop_user_uid = 800,
+	$hadoop_group = "hadoop",
+	$hadoop_group_gid = 800,
 
-	$hadoop_user = extlookup("hadoop_user")
-	$hadoop_user_uid = extlookup("hadoop_user_uid")
-	$hadoop_group = extlookup("hadoop_group")
-	$hadoop_group_gid = extlookup("hadoop_group_gid")
-
-	$version = extlookup("version")
-	$master = extlookup("master")
-	$slaves = extlookup("slaves")
-	$hdfsport =  extlookup("hdfsport")
-	$replication =  extlookup("replication")
-	$jobtrackerport =  extlookup("jobtrackerport")
-	$java_home =  extlookup("java_home")
-	$hadoop_base =  extlookup("hadoop_base")
-	$hdfs_path =  extlookup("hdfs_path")
+	$version = "1.1.2",
+	$master = "master0",
+	$slaves = "slave0,slave1,slave2",
+	$hdfsport =  8020,
+	$replication =  3,
+	$jobtrackerport =  8021,
+	$java_home =  "/usr/lib/jvm/java",
+	$hadoop_base =  "/opt/hadoop",
+	$hdfs_path = "UNSET"	
 	
+) {
+	if $hdfs_path == 'UNSET' {
+		$hdfs_path = "/home/${hadoop::params::hadoop_user}/hdfs"
+	}
 }
