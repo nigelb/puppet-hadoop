@@ -18,6 +18,10 @@ class hadoop::params(
 	
 ) {
 	if $hdfs_path == 'UNSET' {
-		$hdfs_path = "/home/${hadoop::params::hadoop_user}/hdfs"
+		$real_hdfs_path = "/home/${hadoop::params::hadoop_user}/hdfs"
+	}
+	else
+	{
+		$real_hdfs_path = $hdfs_path
 	}
 }

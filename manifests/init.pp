@@ -42,7 +42,7 @@ class hadoop {
 		require => [ User[$hadoop::params::hadoop_user], Group[$hadoop::params::hadoop_group] ]
 	}
 
-	file {"$hadoop::params::hdfs_path":
+	file {"$hadoop::params::real_hdfs_path":
 		ensure => "directory",
 		owner => $hadoop::params::hadoop_user,
 		group => $hadoop::params::hadoop_group,
