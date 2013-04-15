@@ -8,7 +8,7 @@ class hadoop::params(
 
 	$version = "1.1.2",
 	$master = "master0",
-	$slaves = "slave0,slave1,slave2",
+	$slaves = ["slave0", "slave1", "slave2"],
 	$hdfsport =  8020,
 	$replication =  3,
 	$jobtrackerport =  8021,
