@@ -13,7 +13,7 @@ class hadoop::cluster::service {
 
 	exec{"${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/ssh_initilize.sh":
 		alias   => "ssh-init",
-		command => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/ssh_initilize.sh"
+		command => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/ssh_initilize.sh",
 		require => File["ssh-init-script"],
 		user    => $hadoop::params::hadoop_user,
 		group   => $hadoop::params::hadoop_group,
