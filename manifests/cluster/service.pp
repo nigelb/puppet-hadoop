@@ -6,7 +6,7 @@ class hadoop::cluster::service {
 		alias   => "ssh-init-script",
 		content => template("hadoop/bin/ssh_initilize.sh.erb"),
 		require => File["hadoop-master"],
-		mode    => 744
+		mode    => 755
 	}
 
 	Exec{ path => ["/bin", "/usr/bin", "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin"] }
