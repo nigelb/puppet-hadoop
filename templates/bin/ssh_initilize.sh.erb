@@ -1,0 +1,7 @@
+#!/bin/bash
+
+<% scope.lookupvar('hadoop::params::slaves').each do |var| -%>
+ssh -o StrictHostKeyChecking=no <%= var %> ls
+<% end -%>
+
+ssh -o StrictHostKeyChecking=no <%= scope.lookupvar('hadoop::params::master') %>
