@@ -1,7 +1,7 @@
 
 
 class hadoop::cluster::service {
-
+	require hadoop::params
 	file{"${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/ssh_initilize.sh":
 		alias   => "ssh-init-script",
 		content => template("hadoop/bin/ssh_initilize.sh.erb"),
