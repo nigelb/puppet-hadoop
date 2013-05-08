@@ -129,6 +129,12 @@ class hadoop {
 		alias => "hadoop-env-sh",
 		content => template("hadoop/conf/hadoop-env.sh.erb"),
 	}
+
+	file { "/etc/profile.d/hadoop.sh":
+		mode => "544",
+		alias => "hadoop-path",
+		content => template("hadoop/profile.d/hadoop.sh.erb"),
+	}
 	
 	exec { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/bin/hadoop namenode -format":
 		user => $hadoop::params::hadoop_user,
