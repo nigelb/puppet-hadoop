@@ -14,7 +14,8 @@ class hadoop::params(
 	$jobtrackerport =  8021,
 	$java_home =  "/usr/lib/jvm/java",
 	$hadoop_base =  "/opt/hadoop",
-	$hdfs_path = "UNSET"	
+	$hdfs_path = "UNSET",
+	$hdfs_permisions = "true",
 	
 ) {
 	if $hdfs_path == 'UNSET' {
