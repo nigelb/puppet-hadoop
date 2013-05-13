@@ -98,7 +98,7 @@ class hadoop {
 		force => true,
 		ensure => "link",
 		target => "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/logs",
-		alias => "etc-hadoop-symlink",
+		alias => "log-hadoop-symlink",
 		owner => $hadoop::params::hadoop_user,
 		group => $hadoop::params::hadoop_group,
 		require => File["hadoop-source-tgz"],
