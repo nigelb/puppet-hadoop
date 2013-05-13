@@ -139,6 +139,15 @@ class hadoop {
 		content => template("hadoop/conf/hadoop-env.sh.erb"),
 	}
 
+	file { "${hadoop::params::hadoop_base}/hadoop-${hadoop::params::version}/conf/log4j.properties":
+		owner => $hadoop::params::hadoop_user,
+		group => $hadoop::params::hadoop_group,
+		mode => "644",
+		alias => "hadoop-logging-config",
+		content => "puppet:///modules/hadoop/conf/log4j.properties",
+		require => File["hadoop-app-dir"]
+	}
+
 	file { "/etc/profile.d/hadoop.sh":
 		mode => "544",
 		alias => "hadoop-path",
