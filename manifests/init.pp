@@ -144,8 +144,9 @@ class hadoop {
 		group => $hadoop::params::hadoop_group,
 		mode => "644",
 		alias => "hadoop-logging-config",
-		content => "puppet:///modules/hadoop/conf/log4j.properties",
-		require => File["hadoop-app-dir"]
+		source => "puppet:///modules/hadoop/conf/log4j.properties",
+		require => File["hadoop-app-dir"],
+		ensure  => present,
 	}
 
 	file { "/etc/profile.d/hadoop.sh":
