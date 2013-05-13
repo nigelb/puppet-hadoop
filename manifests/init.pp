@@ -166,6 +166,7 @@ class hadoop {
 		group => $hadoop::params::hadoop_group,
 		mode => "700",
 		ensure => "directory",
+		require => User[$hadoop::params::hadoop_user],
 		alias => "hduser-ssh-dir",
 	}
 	
