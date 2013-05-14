@@ -196,8 +196,8 @@ class hadoop {
 		group => $hadoop::params::hadoop_group,
 		mode => "600",
 		source => "puppet:///modules/hadoop/ssh/id_rsa",
-		require => [File["hduser-ssh-dir"], File["hadoop-ssh-public-key"]],
-		alias => "hadoop-ssh-private-key"
+		require => File["hadoop-ssh-public-key"],
+		alias => "hadoop-ssh-private-key",
 	}
 	
 	file { "/home/${hadoop::params::hadoop_user}/.ssh/authorized_keys":
